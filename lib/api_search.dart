@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 class SearchNotifier extends StateNotifier<List<SearchResults>> {
   SearchNotifier() : super([]);
 
-  Future<void> getSearchText(String searchText) async {
-    final results = await githubSearch(searchText);
+  Future<void> getSearchText(String searchText, String sortType) async {
+    final results = await githubSearch(searchText,sortType);
     state = results;
   }
 }
@@ -16,10 +16,14 @@ final searchProvider =
     StateNotifierProvider<SearchNotifier, List<SearchResults>>(
   (ref) => SearchNotifier(),
 );
-
+//ソート
+final sortStateProvider = StateProvider<String>((ref) => '');
+final sortProvider = Provider<String>((ref) {
+  final sortType = ref.watch(sortStateProvider);
+  return sortType;
+});
 //GitHub APIを使用してリポジトリを検索
-Future<List<SearchResults>> githubSearch(String searchText) async {
-  const sort = 'stars';
+Future<List<SearchResults>> githubSearch(String searchText,String sort) async {
   final url =
       'https://api.github.com/search/repositories?sort=$sort&q=$searchText';
 
