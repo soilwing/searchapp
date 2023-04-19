@@ -80,7 +80,8 @@ class SearchPage extends StatelessWidget {
                     final result = resultState[index];
                     return GestureDetector(
                       child: ListTile(
-                        title: Text(result.name),
+                        title: Text(result.fullName),
+                        subtitle: Text(result.description),
                       ),
                       onTap: () {
                         Navigator.push(

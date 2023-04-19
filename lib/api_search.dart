@@ -8,10 +8,11 @@ class SearchNotifier extends StateNotifier<List<SearchResults>> {
   SearchNotifier() : super([]);
 
   Future<void> getSearchText(String searchText, String sortType) async {
-    final results = await githubSearch(searchText,sortType);
+    final results = await githubSearch(searchText, sortType);
     state = results;
   }
 }
+
 final searchProvider =
     StateNotifierProvider<SearchNotifier, List<SearchResults>>(
   (ref) => SearchNotifier(),
@@ -23,7 +24,7 @@ final sortProvider = Provider<String>((ref) {
   return sortType;
 });
 //GitHub APIを使用してリポジトリを検索
-Future<List<SearchResults>> githubSearch(String searchText,String sort) async {
+Future<List<SearchResults>> githubSearch(String searchText, String sort) async {
   final url =
       'https://api.github.com/search/repositories?sort=$sort&q=$searchText';
 
@@ -43,6 +44,7 @@ Future<List<SearchResults>> githubSearch(String searchText,String sort) async {
     return [];
   }
 }
+
 // リポジトリ詳細からsubscribers_countの値を取得しWatcher数とする
 // (watchers_countとstargazers_countに同じ値が設定されているため)
 Future<int> getSubscribers(String fullName) async {
@@ -65,37 +67,46 @@ Future<int> getSubscribers(String fullName) async {
 class SearchResults {
   SearchResults(
     this.name,
+    this.fullName,
     this.avatarUrl,
     this.language,
     this.stargazersCount,
     this.watchersCount,
     this.forksCount,
     this.openIssuesCount,
+    this.description,
+    this.url,
   );
 
   String name;
+  String fullName;
   String avatarUrl;
-  String? language;
+  String language;
   int stargazersCount;
   int watchersCount;
   int forksCount;
   int openIssuesCount;
+  String description;
+  String url;
 
   factory SearchResults.fromJson(Map<String, dynamic> json) {
     final searchResults = SearchResults(
+      json['name'] as String,
       json['full_name'] as String,
       json['owner']['avatar_url'] as String,
-      json['language'] as String?,
+      json['language'] as String? ?? '不明',
       json['stargazers_count'] as int,
       0,
       json['forks_count'] as int,
       json['open_issues_count'] as int,
+      json['description'] as String? ?? '',
+      json['html_url'] as String,
     );
     searchResults.loadWatchersCount();
     return searchResults;
   }
 
   Future<void> loadWatchersCount() async {
-    watchersCount = await getSubscribers(name);
+    watchersCount = await getSubscribers(fullName);
   }
 }
