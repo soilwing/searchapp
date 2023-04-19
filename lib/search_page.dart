@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:searchapp/theme_change.dart';
 import 'api_search.dart';
 import 'detail_page.dart';
 
@@ -12,6 +13,16 @@ class SearchPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('SearchApp'),
+        actions: [
+          Consumer(builder: (context, ref, _) {
+            final themeMode = ref.watch(themeModeProvider);
+            return Switch(
+                value: themeMode == ThemeMode.dark,
+                onChanged: (_) {
+                  ref.read(themeModeProvider.notifier).toggleThemeMode();
+                });
+          })
+        ],
       ),
       body: Center(
         child: Column(
