@@ -2,21 +2,29 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:searchapp/loading.dart';
 
 //検索ワード、結果の管理
 class SearchNotifier extends StateNotifier<List<SearchResults>> {
-  SearchNotifier() : super([]);
+  SearchNotifier(this._loadingNotifier) : super([]);
+
+  final StateNotifier<bool> _loadingNotifier;
 
   Future<void> getSearchText(String searchText, String sortType) async {
-    final results = await githubSearch(searchText, sortType);
-    state = results;
+    try {
+      _loadingNotifier.state = true;
+      final results = await githubSearch(searchText, sortType);
+      state = results;
+    } finally {
+      _loadingNotifier.state = false;
+    }
   }
 }
 
 final searchProvider =
     StateNotifierProvider<SearchNotifier, List<SearchResults>>(
-  (ref) => SearchNotifier(),
-);
+        (ref) => SearchNotifier(ref.watch(loadingProvider.notifier)));
+
 //ソート
 final sortStateProvider = StateProvider<String>((ref) => '');
 final sortProvider = Provider<String>((ref) {

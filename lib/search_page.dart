@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:searchapp/loading.dart';
 import 'package:searchapp/theme_change.dart';
 import 'api_search.dart';
 import 'detail_page.dart';
@@ -42,13 +43,16 @@ class SearchPage extends StatelessWidget {
             ),
             Consumer(builder: (context, ref, _) {
               final searchTextNotifier = ref.watch(searchProvider.notifier);
+              final loadingState = ref.watch(loadingProvider);
               // 検索ボタン
               return ElevatedButton(
                   onPressed: () {
                     searchTextNotifier.getSearchText(_searchTextController.text,
                         ref.watch(sortStateProvider));
                   },
-                  child: const Text('検索'));
+                  child: loadingState
+                      ? const CircularProgressIndicator()
+                      : const Text('検索'));
             }),
             Consumer(builder: (context, ref, _) {
               final searchTextNotifier = ref.watch(searchProvider.notifier);
