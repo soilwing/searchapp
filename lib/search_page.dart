@@ -1,62 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:searchapp/search_widgets.dart';
+import 'package:searchapp/theme_change.dart';
+
 import 'api_search.dart';
 import 'detail_page.dart';
 
-class SearchPage extends ConsumerWidget {
+class SearchPage extends StatelessWidget {
   const SearchPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final resultState = ref.watch(searchProvider);
-    final searchTextNotifier = ref.watch(searchProvider.notifier);
-    var _searchTextController = TextEditingController();
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SearchApp'),
+        title: searchBar(),
+        actions: [
+          //theme切り替え
+          Consumer(builder: (context, ref, _) {
+            final themeMode = ref.watch(themeModeProvider);
+            return Switch(
+                value: themeMode == ThemeMode.dark,
+                onChanged: (_) {
+                  ref.read(themeModeProvider.notifier).toggleThemeMode();
+                });
+          })
+        ],
       ),
       body: Center(
         child: Column(
           children: <Widget>[
-            const Text('検索ワード'),
-            // 入力フォームの大きさ
-            SizedBox(
-              width: 300.0,
-              height: 50.0,
-              // 入力フォーム
-              child: TextFormField(
-                controller: _searchTextController,
-                enabled: true,
-                style: const TextStyle(color: Colors.black),
-                maxLines: 1,
-              ),
-            ),
-            // 検索ボタン
-            ElevatedButton(
-                onPressed: () {
-                  searchTextNotifier.getSearchText(_searchTextController.text);
-                },
-                child: const Text('検索')),
-            Expanded(
-              child: ListView.builder(
-                itemCount: resultState.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final result = resultState[index];
-                  return GestureDetector(
-                    child: ListTile(
-                      title: Text(result.name),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DetailPage(data: result)),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            sortList(),
+            Consumer(builder: (context, ref, _) {
+              final resultState = ref.watch(searchProvider);
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: resultState.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final result = resultState[index];
+                    return GestureDetector(
+                      child: SizedBox(
+                        height: 100,
+                        child: Card(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: ListTile(
+                            title: Text(result.fullName),
+                            subtitle: Text(result.description, maxLines: 2),
+                            trailing: const Icon(Icons.chevron_right),
+                            isThreeLine: true,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DetailPage(data: result)),
+                        );
+                      },
+                    );
+                  },
+                ),
+              );
+            }),
           ],
         ),
       ),
