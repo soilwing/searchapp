@@ -60,7 +60,6 @@ Future<int> getSubscribers(String fullName) async {
 
   try {
     final response = await http.get(Uri.parse(url));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       return data['subscribers_count'];

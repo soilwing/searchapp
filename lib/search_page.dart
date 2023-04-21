@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:searchapp/search_widgets.dart';
 import 'package:searchapp/theme_change.dart';
+
 import 'api_search.dart';
 import 'detail_page.dart';
 

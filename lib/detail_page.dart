@@ -25,7 +25,7 @@ class DetailPage extends ConsumerWidget {
   }
 
   Widget _buildVertical(BuildContext context) {
-    // 縦向きの場合
+    // 縦向きの場合アイコンと詳細を縦に並べる
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +47,7 @@ class DetailPage extends ConsumerWidget {
   }
 
   Widget _buildHorizontal(BuildContext context) {
-    // 横向きの場合
+    // // 横向きの場合アイコンと詳細を横に並べる
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:searchapp/theme_change.dart';
-import 'search_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:searchapp/theme_change.dart';
 
+import 'search_page.dart';
 
 // main関数
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
+
 class MyApp extends ConsumerWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -20,14 +21,12 @@ class MyApp extends ConsumerWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         textTheme: GoogleFonts.mPlus1TextTheme(
-            ThemeData(brightness: Brightness.light).textTheme
-        ),
+            ThemeData(brightness: Brightness.light).textTheme),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         textTheme: GoogleFonts.mPlus1TextTheme(
-            ThemeData(brightness: Brightness.dark).textTheme
-        ),
+            ThemeData(brightness: Brightness.dark).textTheme),
       ),
       themeMode: themeMode,
       // SearchAppを表示
