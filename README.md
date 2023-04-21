@@ -1,16 +1,30 @@
 # searchapp
 
-A new Flutter project.
+GithubAPIを利用したFlutter製リポジトリ検索アプリ
 
-## Getting Started
+https://user-images.githubusercontent.com/72150399/233538403-4a6208a6-6815-46c5-9978-c65c47230e5d.mp4
 
-This project is a starting point for a Flutter application.
+## 機能
+- 何かしらのキーワードを入力できる
+- 入力したキーワードで GitHub のリポジトリを検索できる
+- 検索結果は一覧で概要(リポジトリ名、説明）を表示する
+- 検索結果のアイテムをタップしたら、該当リポジトリの詳細（リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数、説明、リポジトリへのリンク）を表示する
+- ダークモードへの切り替え
+- レスポンシブ、横長画面への対応(詳細画面のアイコンと詳細が横並びになります)
+- ソート機能
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## アピールポイント
+- 実用性を考えた実装
+  - ソートの実装、ソート項目変更時にも検索をかける
+  - 検索中は検索ボタンが検索中を示すように
+  - タップで詳細画面へ行けることが伝わるようなデザイン
+  - 名前だけではリポジトリの詳細が分かりづらいので説明、リンクの追加
+  - Watch数がStar数と全く同じで無意味だったためより目的に近いデータを表示
+  
+## 感想・改善点
+- Watch数をsubscribers_countに変更したものの制限が厳しくあまり役立っていない、詳細画面でのみ取得したほうが良いかもしれません。なお認証は負荷をかける必要はないと判断して利用しませんでした。
+- エラーを握りつぶしてしまっている。
+- テストがほぼ書けていない。メリットは実感したのでこれから役立てていきたい。
+- 読みやすさを心がけたがあまりスマートではない部分が残ってしまった。
+- UIの詰めが甘く、視認性があまり良くない部分がある。
+- Flutterそのもの、GitHub諸機能、テスト等未経験の部分が多く手が回りきっていない。しかし良い経験になりました、楽しかったです。
